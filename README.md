@@ -300,9 +300,12 @@ git clone https://github.com/it-me2001/piscessmp.git && cd piscessmp && sudo ./s
 
 <br>
 
-**More from [it-me2001](https://github.com/it-me2001)**
+**Powered by**
 
-[![kimai2](https://img.shields.io/badge/kimai2-Docker%20%2B%20Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://github.com/it-me2001/kimai2)
-[![moontv](https://img.shields.io/badge/moontv-repo-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/it-me2001/moontv)
+[Paper](https://github.com/PaperMC/Paper) · [Geyser](https://github.com/GeyserMC/Geyser) · [Floodgate](https://github.com/GeyserMC/Floodgate) · [ViaVersion](https://github.com/ViaVersion/ViaVersion) · [ViaBackwards](https://github.com/ViaVersion/ViaBackwards)
+
+[Simple Voice Chat](https://github.com/henkelmax/simple-voice-chat) · [SimpleVoice-Geyser](https://github.com/TheodoreMeyer/SimpleVoice-Geyser) · [Staff++](https://github.com/garagepoort/StaffPlusPlus) · [LuckPerms](https://github.com/LuckPerms/LuckPerms) · [TAB](https://github.com/NEZNAMY/TAB)
+
+[CoreProtect](https://github.com/PlayPro/CoreProtect) · [DiscordSRV](https://github.com/DiscordSRV/DiscordSRV) · [BlueMap](https://github.com/BlueMap-Minecraft/BlueMap) · [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) · [Caddy](https://github.com/caddyserver/caddy)
 
 </div>

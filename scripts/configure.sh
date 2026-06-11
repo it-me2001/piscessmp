@@ -56,6 +56,13 @@ EOF
 #   remote.auth-type: floodgate
 EOF
 
+  cat > "$TEMPLATES/bluemap-config-notes.txt" <<'EOF'
+# After first start, BlueMap config lives in plugins/BlueMap/storages/config/
+# Default web map: http://your-ip:8100
+# In-game: /bluemap help
+# With Caddy: https://map.yourdomain.com (see deploy/domain.env.example)
+EOF
+
   cat > "$TEMPLATES/luckperms-commands.txt" <<'EOF'
 /lp creategroup default
 /lp creategroup member
@@ -164,6 +171,27 @@ PY
         echo "Set requireBedrock: false in SimpleVoice-Geyser config manually"
     fi
     echo "Checked SimpleVoice-Geyser config"
+  fi
+
+  # DiscordSRV — copy example config if missing
+  DSRV_CONFIG="$SERVER_DIR/plugins/DiscordSRV/config.yml"
+  if [[ -f "$TEMPLATES/discordsrv-config.yml.example" ]] && [[ ! -f "$DSRV_CONFIG" ]]; then
+    mkdir -p "$SERVER_DIR/plugins/DiscordSRV"
+    cp "$TEMPLATES/discordsrv-config.yml.example" "$DSRV_CONFIG"
+    echo "Created DiscordSRV config — add your bot token and channel ID"
+  fi
+
+  # Domain hint in server.properties
+  DOMAIN_ENV="$DEPLOY_DIR/domain.env"
+  if [[ -f "$PROPS" ]] && [[ -f "$DOMAIN_ENV" ]]; then
+    # shellcheck source=/dev/null
+    source "$DOMAIN_ENV"
+    if [[ -n "${DOMAIN:-}" ]] && [[ "$DOMAIN" != *"example.com"* ]]; then
+      if ! grep -q "^server-name=" "$PROPS" 2>/dev/null; then
+        echo "server-name=$DOMAIN" >> "$PROPS"
+        echo "Set server-name → $DOMAIN"
+      fi
+    fi
   fi
 
   echo "Configuration applied — restart the server."

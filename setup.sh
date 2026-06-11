@@ -149,7 +149,10 @@ cat <<EOF
        # or: sudo systemctl start piscessmp
   3. After first start, apply plugin configs:
        ./scripts/configure.sh --apply
-  4. Set staff ranks (in server console):
+  4. Optional HTTPS + domain:
+       cp deploy/domain.env.example deploy/domain.env
+       sudo ./scripts/setup-caddy.sh
+  5. Set staff ranks (in server console):
        /lp group staff permission set staff.* true
        /lp user <name> parent set staff
 

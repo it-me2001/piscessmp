@@ -1,0 +1,12 @@
+# Copy to plugins/DiscordSRV/config.yml after first start.
+# Create a bot at https://discord.com/developers/applications
+
+BotToken: "PASTE_YOUR_BOT_TOKEN"
+ChannelId: "PASTE_YOUR_CHANNEL_ID"
+
+# Link Minecraft chat ↔ Discord
+DiscordToMinecraftChatMessageFormat: "[&bDiscord&r | %top_role%] %name% » %message%"
+MinecraftToDiscordChatMessageFormat: "**%username%** » %message%"
+
+# Console command from Discord (optional)
+DiscordConsoleChannelId: "PASTE_CONSOLE_CHANNEL_ID"

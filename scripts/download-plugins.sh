@@ -100,6 +100,9 @@ download \
   "TAB.jar"
 verify_jar "TAB.jar"
 
+# Extras — grief rollback, Discord bridge, web map, placeholders
+bash "$ROOT/scripts/download-extras.sh"
+
 echo
 echo "Done. Jars saved to server/plugins/"
 echo
@@ -110,5 +113,6 @@ echo "  LuckPerms (Staff++ soft-dependency for permissions)"
 echo "  Simple Voice Chat bukkit 2.6.18"
 echo "  SimpleVoice-Geyser 0.1.1-DEV"
 echo "  Geyser + Floodgate (keep versions in sync)"
+echo "  CoreProtect, DiscordSRV, BlueMap, PlaceholderAPI"
 echo
 echo "Paper jar: run ./scripts/download-paper.sh (or full ./scripts/debian-setup.sh)"

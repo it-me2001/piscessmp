@@ -160,6 +160,10 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("ViaBackwards", "modrinth:viabackwards:paper", MC_VERSION, "ViaBackwards.jar"),
         ("LuckPerms", "modrinth:luckperms:bukkit", MC_VERSION, "LuckPerms.jar"),
         ("TAB", "github:NEZNAMY/TAB:Vanilla", MC_VERSION, "TAB.jar"),
+        ("CoreProtect", "modrinth:coreprotect:paper", MC_VERSION, "CoreProtect.jar"),
+        ("DiscordSRV", "modrinth:discordsrv:paper", MC_VERSION, "DiscordSRV.jar"),
+        ("BlueMap", "modrinth:bluemap:paper", MC_VERSION, "BlueMap.jar"),
+        ("PlaceholderAPI", "modrinth:placeholderapi:paper", MC_VERSION, "PlaceholderAPI.jar"),
     ]
 
     for name, source, version_key, output_name in plugin_specs:

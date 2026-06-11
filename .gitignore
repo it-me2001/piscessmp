@@ -1,5 +1,6 @@
 server/backups/
 deploy/backup.env
+deploy/domain.env
 server/.update-state.json
 server/paper.jar
 server/plugins/*.jar

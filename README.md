@@ -4,7 +4,7 @@
 
 **Crossplay survival server stack for Debian**
 
-Java + Bedrock · Voice chat · Staff tools · Auto updates · Auto backups
+Java + Bedrock · Voice chat · Staff tools · Web map · Discord · Auto updates · Auto backups
 
 <br>
 
@@ -25,8 +25,7 @@ Java + Bedrock · Voice chat · Staff tools · Auto updates · Auto backups
 [Features](#-features) ·
 [Connect](#-how-players-connect) ·
 [Automation](#-automation) ·
-[Scripts](#-scripts) ·
-[Roadmap](#-optional-next-steps)
+[Scripts](#-scripts)
 
 </div>
 
@@ -84,7 +83,11 @@ sudo ./setup.sh --firewall --systemd --timers
 | 🛡️ | **Staff++** | Ban, mute, kick, freeze, vanish, player reports |
 | 🏷️ | **LuckPerms + TAB** | Rank prefixes on nametags and tab list |
 | 🔄 | **ViaVersion** | Older Java clients can still connect |
-| 📦 | **Auto updater** | Paper + plugins — daily at 4 AM |
+| 🧱 | **CoreProtect** | Log and roll back block changes / griefing |
+| 💬 | **DiscordSRV** | Bridge in-game chat to Discord |
+| 🗺️ | **BlueMap** | Live web map at port 8100 |
+| 🔒 | **Caddy proxy** | HTTPS for voice + map on your domain |
+| 📦 | **Auto updater** | Paper + all plugins — daily at 4 AM |
 | 💾 | **Auto backups** | Worlds + configs — every 6 hours, 7 retained |
 
 <br>
@@ -94,22 +97,30 @@ flowchart TB
   subgraph Players
     J["☕ Java Edition"]
     B["📱 Bedrock Edition"]
+    D["💬 Discord"]
   end
 
   subgraph VPS["🐧 Debian VPS"]
     direction TB
     G["Geyser<br/><code>:19132 UDP</code>"]
     P["Paper 1.21.11<br/><code>:25565 TCP</code>"]
+    C["Caddy<br/><code>:443 TCP</code>"]
     P --- F["Floodgate"]
     P --- VC["Voice Chat<br/><code>:24454 UDP</code>"]
-    P --- SVG["Voice Web UI<br/><code>:8080 TCP</code>"]
+    P --- SVG["Voice Web<br/><code>:8080</code>"]
     P --- S["Staff++"]
+    P --- CP["CoreProtect"]
+    P --- DS["DiscordSRV"]
+    P --- BM["BlueMap<br/><code>:8100</code>"]
     P --- LP["LuckPerms"]
     P --- T["TAB"]
+    C --> SVG
+    C --> BM
   end
 
   J -->|"TCP 25565"| P
   B -->|"UDP 19132"| G --> P
+  D <-->|"chat bridge"| DS
 ```
 
 ### Requirements
@@ -132,7 +143,8 @@ flowchart TB
 | **Java** | `your-ip:25565` | Minecraft 1.21.x |
 | **Bedrock** | `your-ip:19132` | No mods needed |
 | **Voice (Java)** | Press `V` in-game | [SVC mod 2.6.18](https://modrepo.de/minecraft/voicechat/downloads) |
-| **Voice (Bedrock)** | `/svg` then open browser | `http://your-ip:8080` |
+| **Voice (Bedrock)** | `/svg` then open browser | `http://your-ip:8080` or `https://voice.yourdomain.com` |
+| **Web map** | Browser | `http://your-ip:8100` or `https://map.yourdomain.com` |
 
 ### Ports
 
@@ -142,6 +154,8 @@ flowchart TB
 | `19132` | UDP | Bedrock / Geyser |
 | `24454` | UDP | Simple Voice Chat |
 | `8080` | TCP | Voice web UI |
+| `8100` | TCP | BlueMap web |
+| `80` / `443` | TCP | Caddy HTTPS (optional) |
 
 ```bash
 sudo ./scripts/debian-firewall.sh
@@ -151,10 +165,20 @@ sudo ./scripts/debian-firewall.sh
 
 ## After first start
 
-`configure.sh` patches Geyser, TAB, RCON, and voice settings automatically:
+`configure.sh` patches Geyser, TAB, RCON, voice, and Discord settings:
 
 ```bash
 ./scripts/configure.sh --apply
+```
+
+**Discord bridge** — edit `server/plugins/DiscordSRV/config.yml` with your [bot token](https://discord.com/developers/applications). Template: [`discordsrv-config.yml.example`](server/config-templates/discordsrv-config.yml.example)
+
+**HTTPS + custom domain:**
+
+```bash
+cp deploy/domain.env.example deploy/domain.env
+# set DOMAIN, ACME_EMAIL, VOICE_HOST, MAP_HOST
+sudo ./scripts/setup-caddy.sh
 ```
 
 Grant staff permissions in the server console:
@@ -233,6 +257,7 @@ sudo systemctl list-timers 'piscessmp-*'
 | [`./setup.sh --production`](setup.sh) | Full production setup |
 | [`./scripts/start.sh`](scripts/start.sh) | Start server (Aikar JVM flags) |
 | [`./scripts/configure.sh --apply`](scripts/configure.sh) | Apply plugin configs |
+| [`./scripts/setup-caddy.sh`](scripts/setup-caddy.sh) | HTTPS reverse proxy |
 | [`./scripts/update.sh`](scripts/update.sh) | Update Paper + plugins |
 | [`./scripts/backup.sh`](scripts/backup.sh) | Backup worlds + configs |
 
@@ -246,6 +271,7 @@ piscessmp/
 ├── scripts/
 │   ├── start.sh
 │   ├── configure.sh
+│   ├── setup-caddy.sh
 │   ├── update.sh
 │   └── backup.sh
 ├── deploy/                     # systemd units + timers
@@ -255,18 +281,6 @@ piscessmp/
     ├── config-templates/
     └── backups/worlds/
 ```
-
----
-
-## Optional next steps
-
-| | Add-on | Why |
-|:--:|--------|-----|
-| ⬜ | [CoreProtect](https://www.spigotmc.org/resources/coreprotect.8631/) | Roll back griefing |
-| ⬜ | [DiscordSRV](https://github.com/DiscordSRV/DiscordSRV) | Bridge chat to Discord |
-| ⬜ | [BlueMap](https://bluemap.bluecolored.de/) | Live web map |
-| ⬜ | Caddy / Nginx | HTTPS for voice web UI |
-| ⬜ | Custom domain | Easier for players to find you |
 
 ---
 

@@ -18,6 +18,13 @@ ufw allow 24454/udp comment 'Simple Voice Chat'
 # SimpleVoice-Geyser web UI
 ufw allow 8080/tcp comment 'Voice web UI'
 
+# BlueMap web UI
+ufw allow 8100/tcp comment 'BlueMap web'
+
+# Caddy HTTPS (optional — setup-caddy.sh)
+ufw allow 80/tcp comment 'Caddy HTTP'
+ufw allow 443/tcp comment 'Caddy HTTPS'
+
 echo "Firewall rules added. Enable ufw if not active:"
 echo "  ufw enable"
 ufw status numbered

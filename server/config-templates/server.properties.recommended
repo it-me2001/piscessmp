@@ -1,0 +1,9 @@
+# Append or merge these after first server start
+motd=Pisces SMP
+max-players=20
+online-mode=true
+enable-rcon=true
+rcon.port=25575
+spawn-protection=16
+view-distance=10
+simulation-distance=10

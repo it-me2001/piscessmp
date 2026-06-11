@@ -1,0 +1,27 @@
+[Unit]
+Description=Pisces SMP Minecraft Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=minecraft
+Group=minecraft
+WorkingDirectory=/opt/piscessmp/server
+ExecStart=/opt/piscessmp/scripts/start.sh
+Restart=on-failure
+RestartSec=10
+SuccessExitStatus=0
+TimeoutStopSec=120
+
+# Graceful stop — Paper respects SIGTERM
+KillSignal=SIGTERM
+KillMode=mixed
+
+Environment=MEMORY_MIN=4G
+Environment=MEMORY_MAX=4G
+Environment=JAVA=java
+Environment=UPDATE_ON_START=true
+
+[Install]
+WantedBy=multi-user.target

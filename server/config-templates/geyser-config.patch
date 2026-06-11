@@ -1,0 +1,3 @@
+# plugins/Geyser-Spigot/config.yml — set after first start:
+#   bedrock.port: 19132
+#   remote.auth-type: floodgate

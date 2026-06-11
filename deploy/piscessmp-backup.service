@@ -1,0 +1,13 @@
+[Unit]
+Description=Pisces SMP — world and config backup
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=minecraft
+Group=minecraft
+WorkingDirectory=/opt/piscessmp
+EnvironmentFile=-/opt/piscessmp/deploy/backup.env
+ExecStart=/opt/piscessmp/scripts/backup.sh
+Nice=10

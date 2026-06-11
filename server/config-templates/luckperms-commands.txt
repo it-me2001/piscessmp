@@ -1,0 +1,12 @@
+/lp creategroup default
+/lp creategroup member
+/lp creategroup staff
+/lp creategroup admin
+/lp group default meta setprefix "&7"
+/lp group member meta setprefix "&a[Member] &r"
+/lp group staff meta setprefix "&b[Staff] &r"
+/lp group admin meta setprefix "&c[Admin] &r"
+/lp group member parent add default
+/lp group staff parent add member
+/lp group admin parent add staff
+/lp group staff permission set staff.* true

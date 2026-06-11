@@ -1,0 +1,11 @@
+server/backups/
+deploy/backup.env
+server/.update-state.json
+server/paper.jar
+server/plugins/*.jar
+server/eula.txt
+server/logs/
+server/world/
+server/world_nether/
+server/world_the_end/
+server/plugins/*/

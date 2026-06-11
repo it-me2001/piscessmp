@@ -1,0 +1,16 @@
+{
+  "name": "piscessmp",
+  "private": true,
+  "scripts": {
+    "setup": "bash setup.sh",
+    "setup:production": "bash setup.sh --production --accept-eula",
+    "download": "bash scripts/download-plugins.sh",
+    "setup:debian": "bash scripts/debian-setup.sh",
+    "configure": "bash scripts/configure.sh --apply",
+    "start": "bash scripts/start.sh",
+    "update": "bash scripts/update.sh",
+    "update:check": "bash scripts/update.sh --check",
+    "backup": "bash scripts/backup.sh",
+    "backup:check": "bash scripts/backup.sh --check"
+  }
+}

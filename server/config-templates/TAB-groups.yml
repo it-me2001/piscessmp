@@ -1,0 +1,28 @@
+# Copy to plugins/TAB/groups.yml after first server start.
+# LuckPerms stores the tag text; TAB displays it on nametags and the tab list.
+
+_DEFAULT_:
+  tabprefix: "%luckperms-prefix%"
+  tabsuffix: "%luckperms-suffix%"
+  tagprefix: "%luckperms-prefix%"
+  tagsuffix: "%luckperms-suffix%"
+
+owner:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"
+
+admin:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"
+
+staff:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"
+
+member:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"
+
+default:
+  tabprefix: "%luckperms-prefix%"
+  tagprefix: "%luckperms-prefix%"

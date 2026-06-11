@@ -1,0 +1,12 @@
+[Unit]
+Description=Pisces SMP — check and apply server updates
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=minecraft
+Group=minecraft
+WorkingDirectory=/opt/piscessmp
+ExecStart=/opt/piscessmp/scripts/update.sh --restart
+Nice=10

@@ -298,4 +298,11 @@ Built for Debian · Ready for crossplay
 git clone https://github.com/it-me2001/piscessmp.git && cd piscessmp && sudo ./setup.sh --production --accept-eula
 ```
 
+<br>
+
+**More from [it-me2001](https://github.com/it-me2001)**
+
+[![kimai2](https://img.shields.io/badge/kimai2-Docker%20%2B%20Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://github.com/it-me2001/kimai2)
+[![moontv](https://img.shields.io/badge/moontv-repo-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/it-me2001/moontv)
+
 </div>

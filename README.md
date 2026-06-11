@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d3b4d,50:1a6b7c,100:2dd4bf&height=140&section=header&text=Pisces%20SMP&fontSize=42&fontColor=ffffff&animation=twinkling" alt="Pisces SMP" />
+<img src="https://capsule-render.vercel.app/api?type=soft&color=0:0d3b4d,50:1a6b7c,100:2dd4bf&height=140&section=header&text=Pisces%20SMP&fontSize=42&fontColor=ffffff" alt="Pisces SMP" />
 
 **Crossplay survival server stack for Debian**
 

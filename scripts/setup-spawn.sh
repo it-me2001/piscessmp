@@ -109,13 +109,13 @@ if [[ ! -d "$SERVER_DIR/$SPAWN_WORLD" ]]; then
 else
   echo "World $SPAWN_WORLD already exists — skipping mv create"
 fi
-rcon "mv modify set spawn true $SPAWN_WORLD"
-rcon "mv modify set gamemode adventure $SPAWN_WORLD"
-rcon "mv modify set difficulty peaceful $SPAWN_WORLD"
-rcon "mv modify set animals false $SPAWN_WORLD"
-rcon "mv modify set monsters false $SPAWN_WORLD"
-rcon "mv modify set pvp false $SPAWN_WORLD"
-rcon "mv modify set allow-weather false $SPAWN_WORLD"
+rcon "mv modify ${SPAWN_WORLD} set spawn true"
+rcon "mv modify ${SPAWN_WORLD} set gamemode adventure"
+rcon "mv modify ${SPAWN_WORLD} set difficulty peaceful"
+rcon "mv modify ${SPAWN_WORLD} set animals false"
+rcon "mv modify ${SPAWN_WORLD} set monsters false"
+rcon "mv modify ${SPAWN_WORLD} set pvp false"
+rcon "mv modify ${SPAWN_WORLD} set allow-weather false"
 rcon "execute in spawn run gamerule randomTickSpeed 0"
 rcon "execute in spawn run gamerule doDaylightCycle false"
 

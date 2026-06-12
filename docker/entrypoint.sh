@@ -28,10 +28,6 @@ BACKUP_RETAIN=${BACKUP_RETAIN:-7}
 EOF
 fi
 
-if [[ ! -f "$SERVER_DIR/server-icon.png" ]] && [[ -f "$ROOT/docker/server-icon.png" ]]; then
-  cp "$ROOT/docker/server-icon.png" "$SERVER_DIR/server-icon.png"
-fi
-
 if [[ ! -f "$SERVER_DIR/.docker-prepared" ]]; then
   bash "$ROOT/scripts/configure.sh" --prepare || true
   touch "$SERVER_DIR/.docker-prepared"

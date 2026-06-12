@@ -76,35 +76,39 @@ sudo ./setup.sh --firewall --systemd --timers
 
 ## Docker
 
-Run the full stack with Docker Compose (Paper + plugins download on first boot):
+Run with Docker Compose (recommended for VPS and local):
 
 ```bash
-cp docker.env.example docker.env   # set RCON_PASSWORD
+cp docker.env.example docker.env   # set RCON_PASSWORD (or run scripts/docker-migrate.sh on VPS)
 docker compose up -d --build
 docker compose logs -f
 ```
 
-After the first boot finishes (`Done` in logs), apply config templates:
+**Migrate existing systemd install on the VPS:**
+
+```bash
+cd /opt/piscessmp
+sudo bash scripts/docker-migrate.sh
+```
+
+This stops `piscessmp.service`, bind-mounts your existing `server/` data, and starts the container.
+
+| Task | Command |
+|------|---------|
+| Stop | `docker compose down` |
+| Restart | `docker compose restart` |
+| Logs | `docker compose logs -f` |
+| Shell | `docker compose exec piscessmp bash` |
+| Backup | `docker compose exec piscessmp ./scripts/backup.sh` |
+| Update | `docker compose exec piscessmp ./scripts/update.sh --restart` |
+| Apply configs | `docker compose exec piscessmp ./scripts/configure.sh --apply` |
+
+After first boot, apply config templates once:
 
 ```bash
 docker compose exec piscessmp ./scripts/configure.sh --apply
 docker compose restart
 ```
-
-Optional — hub spawn world + `/spawn`:
-
-```bash
-docker compose exec piscessmp bash -c 'SKIP_UFW=1 bash scripts/setup-spawn.sh'
-```
-
-| Task | Command |
-|------|---------|
-| Stop | `docker compose down` |
-| Update plugins | `docker compose exec piscessmp ./scripts/update.sh` |
-| Backup | `docker compose exec piscessmp ./scripts/backup.sh` |
-| Shell | `docker compose exec piscessmp bash` |
-
-Server data persists in the `piscessmp-server` Docker volume.
 
 ---
 

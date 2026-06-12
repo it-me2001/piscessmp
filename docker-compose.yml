@@ -4,9 +4,11 @@ services:
     image: piscessmp:latest
     container_name: piscessmp
     restart: unless-stopped
+    env_file:
+      - docker.env
     environment:
       ACCEPT_EULA: ${ACCEPT_EULA:-true}
-      MEMORY_MIN: ${MEMORY_MIN:-2G}
+      MEMORY_MIN: ${MEMORY_MIN:-4G}
       MEMORY_MAX: ${MEMORY_MAX:-4G}
       RCON_PASSWORD: ${RCON_PASSWORD:-change-me}
       UPDATE_ON_START: ${UPDATE_ON_START:-false}
@@ -18,13 +20,12 @@ services:
       - "${VOICE_WEB_PORT:-8080}:8080/tcp"
       - "${BLUEMAP_PORT:-8100}:8100/tcp"
     volumes:
-      - piscessmp-server:/piscessmp/server
+      # Bind-mount live data from the host (VPS: /opt/piscessmp)
+      - ./server:/piscessmp/server
+      - ./deploy:/piscessmp/deploy
     healthcheck:
       test: ["CMD", "bash", "-c", "nc -z localhost 25565"]
       interval: 30s
       timeout: 5s
       retries: 5
-      start_period: 120s
-
-volumes:
-  piscessmp-server:
+      start_period: 180s

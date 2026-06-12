@@ -15,7 +15,6 @@ WORKDIR /piscessmp
 COPY scripts ./scripts
 COPY server/config-templates ./server/config-templates
 COPY server/assets ./server/assets
-COPY server/server-icon.png ./docker/server-icon.png
 COPY deploy/backup.env.example ./deploy/backup.env.example
 COPY docker/entrypoint.sh ./docker/entrypoint.sh
 COPY setup.sh ./setup.sh

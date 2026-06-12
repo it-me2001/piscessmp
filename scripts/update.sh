@@ -55,12 +55,15 @@ if [[ "${BACKUP_BEFORE_UPDATE:-true}" == "true" ]] && [[ $STATUS -eq 10 ]]; then
   bash "$ROOT/scripts/backup.sh" || true
 fi
 
-if [[ $STATUS -eq 10 ]] && $RESTART && command -v systemctl >/dev/null 2>&1; then
-  if systemctl is-active --quiet piscessmp 2>/dev/null; then
+if [[ $STATUS -eq 10 ]] && $RESTART; then
+  if docker compose -f "$ROOT/docker-compose.yml" ps --status running -q piscessmp 2>/dev/null | grep -q .; then
+    echo "Restarting Docker container..."
+    docker compose -f "$ROOT/docker-compose.yml" restart piscessmp
+  elif command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet piscessmp 2>/dev/null; then
     echo "Restarting piscessmp service..."
     sudo systemctl restart piscessmp
   else
-    echo "piscessmp service is not running — start manually with ./scripts/start.sh"
+    echo "Server not running — start with docker compose up -d or ./scripts/start.sh"
   fi
 fi
 

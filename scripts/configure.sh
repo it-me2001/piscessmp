@@ -40,7 +40,7 @@ mkdir -p "$TEMPLATES"
 if $PREPARE; then
   cat > "$TEMPLATES/server.properties.recommended" <<'EOF'
 # Append or merge these after first server start
-motd=Pisces SMP
+motd=\u00a7f\u00a7lPISCES\u00a7r\n\u00a7bSMP
 max-players=20
 online-mode=true
 enable-rcon=true
@@ -233,13 +233,43 @@ PY
     echo "BetterRTP config not found — start server once after installing BetterRTP.jar"
   fi
 
-  # EssentialsX — ensure named homes are enabled
+  # EssentialsX — named homes + hub spawn (/spawn, spawn-on-join)
   ESSENTIALS_CONFIG="$SERVER_DIR/plugins/Essentials/config.yml"
   if [[ -f "$ESSENTIALS_CONFIG" ]]; then
     if ! grep -q "allow-user-home-names:" "$ESSENTIALS_CONFIG" 2>/dev/null; then
       echo "allow-user-home-names: true" >> "$ESSENTIALS_CONFIG"
       echo "Enabled EssentialsX named homes (allow-user-home-names)"
     fi
+    python3 - "$ESSENTIALS_CONFIG" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+text = path.read_text()
+text = re.sub(r"(?m)^(\s*)-\s*spawn\s*$", "", text)
+text = re.sub(r"spawn-on-join:\s*false", "spawn-on-join: true", text)
+spawn_block = """spawns:
+  default:
+    world: spawn
+    x: 0.5
+    y: 65.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+"""
+if "spawns:" in text:
+    text = re.sub(
+        r"spawns:\s*\n\s*default:\s*\n(?:\s+\w+:.*\n)+",
+        spawn_block,
+        text,
+        count=1,
+    )
+else:
+    text = text.rstrip() + "\n\nspawn-on-join: true\n" + spawn_block
+path.write_text(text)
+print("Essentials hub spawn + spawn-on-join (/spawn enabled)")
+PY
   else
     echo "EssentialsX config not found — start server once after installing EssentialsX.jar"
   fi

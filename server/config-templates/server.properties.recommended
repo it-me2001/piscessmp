@@ -1,5 +1,6 @@
 # Append or merge these after first server start
-motd=Pisces SMP
+# § codes — match server icon: PISCES / SMP
+motd=\u00a7f\u00a7lPISCES\u00a7r\n\u00a7bSMP
 max-players=20
 online-mode=true
 enable-rcon=true

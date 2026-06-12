@@ -81,3 +81,22 @@ ESSENTIALS_URL="$(curl -fsSL "https://api.github.com/repos/EssentialsX/Essential
   | python3 -c "import json,sys,re; r=json.load(sys.stdin); a=next(x for x in r['assets'] if re.match(r'^EssentialsX-[\\d.]+\\.jar$', x['name'])); print(a['browser_download_url'])")"
 curl -fsSL "$ESSENTIALS_URL" -o "$PLUGINS_DIR/EssentialsX.jar"
 verify_jar "EssentialsX.jar"
+
+echo "→ Multiverse-Core.jar (Hangar Multiverse/Multiverse-Core)"
+MULTIVERSE_META="$(python3 - <<'PY'
+import json, urllib.parse, urllib.request
+query = urllib.parse.urlencode({"limit": 1, "offset": 0, "platform": "PAPER"})
+url = f"https://hangar.papermc.io/api/v1/projects/Multiverse/Multiverse-Core/versions?{query}"
+with urllib.request.urlopen(url) as response:
+    versions = json.load(response)["result"]
+latest = versions[0]
+paper = latest["downloads"]["PAPER"]
+print(latest["name"])
+print(paper["downloadUrl"])
+PY
+)"
+MULTIVERSE_VERSION="$(echo "$MULTIVERSE_META" | sed -n '1p')"
+MULTIVERSE_URL="$(echo "$MULTIVERSE_META" | sed -n '2p')"
+echo "→ Multiverse-Core.jar ($MULTIVERSE_VERSION)"
+curl -fsSL "$MULTIVERSE_URL" -o "$PLUGINS_DIR/Multiverse-Core.jar"
+verify_jar "Multiverse-Core.jar"

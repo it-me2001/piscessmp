@@ -74,6 +74,40 @@ sudo ./setup.sh --firewall --systemd --timers
 
 ---
 
+## Docker
+
+Run the full stack with Docker Compose (Paper + plugins download on first boot):
+
+```bash
+cp docker.env.example docker.env   # set RCON_PASSWORD
+docker compose up -d --build
+docker compose logs -f
+```
+
+After the first boot finishes (`Done` in logs), apply config templates:
+
+```bash
+docker compose exec piscessmp ./scripts/configure.sh --apply
+docker compose restart
+```
+
+Optional — hub spawn world + `/spawn`:
+
+```bash
+docker compose exec piscessmp bash -c 'SKIP_UFW=1 bash scripts/setup-spawn.sh'
+```
+
+| Task | Command |
+|------|---------|
+| Stop | `docker compose down` |
+| Update plugins | `docker compose exec piscessmp ./scripts/update.sh` |
+| Backup | `docker compose exec piscessmp ./scripts/backup.sh` |
+| Shell | `docker compose exec piscessmp bash` |
+
+Server data persists in the `piscessmp-server` Docker volume.
+
+---
+
 ## Features
 
 | | Component | What it does |
@@ -156,10 +190,11 @@ flowchart TB
 | `/home [name]` | Teleport to a saved home |
 | `/delhome [name]` | Delete a home |
 | `/homes` | List your homes |
-| `/spawn` | Teleport to world spawn |
+| `/spawn` | Teleport to the hub (separate spawn world) |
+| `/warp survival` | Enter the survival overworld |
 | `/tpa <player>` | Ask to teleport to another player |
 | `/tpaccept` / `/tpdeny` | Accept or deny a TPA request |
-| `/rtp` | Random teleport (5s delay, 5 min cooldown) |
+| `/rtp` | Random teleport in survival only (5s delay, 5 min cooldown) |
 
 After installing the new plugins, run LuckPerms setup from [`luckperms-homes-rtp.txt`](server/config-templates/luckperms-homes-rtp.txt) in the server console.
 

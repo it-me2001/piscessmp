@@ -1,6 +1,8 @@
 server/backups/
 deploy/backup.env
 deploy/domain.env
+docker.env
+server/.docker-prepared
 server/.update-state.json
 server/paper.jar
 server/plugins/*.jar

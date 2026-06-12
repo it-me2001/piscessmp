@@ -1,0 +1,30 @@
+services:
+  piscessmp:
+    build: .
+    image: piscessmp:latest
+    container_name: piscessmp
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: ${ACCEPT_EULA:-true}
+      MEMORY_MIN: ${MEMORY_MIN:-2G}
+      MEMORY_MAX: ${MEMORY_MAX:-4G}
+      RCON_PASSWORD: ${RCON_PASSWORD:-change-me}
+      UPDATE_ON_START: ${UPDATE_ON_START:-false}
+    ports:
+      - "${JAVA_PORT:-25565}:25565/tcp"
+      - "${RCON_PORT:-25575}:25575/tcp"
+      - "${BEDROCK_PORT:-19132}:19132/udp"
+      - "${VOICE_PORT:-24454}:24454/udp"
+      - "${VOICE_WEB_PORT:-8080}:8080/tcp"
+      - "${BLUEMAP_PORT:-8100}:8100/tcp"
+    volumes:
+      - piscessmp-server:/piscessmp/server
+    healthcheck:
+      test: ["CMD", "bash", "-c", "nc -z localhost 25565"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+
+volumes:
+  piscessmp-server:

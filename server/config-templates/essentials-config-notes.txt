@@ -2,7 +2,8 @@
 #
 # After first start, tune these if needed:
 #
-#   spawn-on-join: false
+#   spawn-on-join: true
+#   spawns.default.world: spawn   (hub — separate from survival overworld)
 #   teleport-cooldown: 5
 #   teleport-delay: 3
 #
@@ -16,7 +17,7 @@
 #   /home [name]      — teleport to a saved home
 #   /delhome [name]   — delete a home
 #   /homes            — list your homes
-#   /spawn            — go to world spawn
+#   /spawn            — teleport to hub (from anywhere)
 #   /tpa <player>     — request to teleport to someone
 #   /tpaccept         — accept a TPA request
 #   /tpdeny           — deny a TPA request

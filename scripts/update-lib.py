@@ -183,6 +183,7 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("PlaceholderAPI", "modrinth:placeholderapi:paper", MC_VERSION, "PlaceholderAPI.jar"),
         ("EssentialsX", "github:EssentialsX/Essentials:EssentialsX", MC_VERSION, "EssentialsX.jar"),
         ("BetterRTP", "hangar:Ronan:BetterRTP", MC_VERSION, "BetterRTP.jar"),
+        ("WorldEdit", "modrinth:worldedit:paper", MC_VERSION, "WorldEdit.jar"),
     ]
 
     for name, source, version_key, output_name in plugin_specs:

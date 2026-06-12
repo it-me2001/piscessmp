@@ -100,3 +100,8 @@ MULTIVERSE_URL="$(echo "$MULTIVERSE_META" | sed -n '2p')"
 echo "→ Multiverse-Core.jar ($MULTIVERSE_VERSION)"
 curl -fsSL "$MULTIVERSE_URL" -o "$PLUGINS_DIR/Multiverse-Core.jar"
 verify_jar "Multiverse-Core.jar"
+
+echo "→ VoidGen.jar (Modrinth void hub generator)"
+curl -fsSL "https://cdn.modrinth.com/data/DCTiMOWF/versions/iIBR44RI/VoidGen-2.3.7.jar" \
+  -o "$PLUGINS_DIR/VoidGen.jar"
+verify_jar "VoidGen.jar"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Separate spawn hub world + survival overworld.
-# - Creates flat "spawn" world (Multiverse), pastes hub schematic there
-# - Keeps "world" as survival; /rtp and homes stay in world
+# Separate floating spawn hub (void world) + survival overworld.
+# - VoidGen empty world with hub schematic pasted in mid-air
+# - Keeps "world" as survival only; clears old hub paste from overworld if present
 # - Essentials /spawn → hub; /warp survival → overworld
 #
 # Run on VPS: sudo bash /opt/piscessmp/scripts/setup-spawn.sh
@@ -31,7 +31,9 @@ SURVIVAL_SPAWN_Y=100
 SURVIVAL_SPAWN_Z=1024
 WORLDEDIT_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/yDUBafTJ/worldedit-bukkit-7.4.3.jar"
 MULTIVERSE_URL="https://hangarcdn.papermc.io/plugins/Multiverse/Multiverse-Core/versions/5.7.0/PAPER/multiverse-core-5.7.0.jar"
+VOIDGEN_URL="https://cdn.modrinth.com/data/DCTiMOWF/versions/iIBR44RI/VoidGen-2.3.7.jar"
 FORCELOAD_RADIUS="${FORCELOAD_RADIUS:-8}" # chunks each direction (~200x200 build)
+RESET_SPAWN_WORLD="${RESET_SPAWN_WORLD:-1}"
 
 rcon() {
   local cmd="$1"
@@ -45,7 +47,17 @@ rcon() {
   sleep 2
 }
 
-echo "=== Plugins: WorldEdit + Multiverse-Core ==="
+rcon_fast() {
+  local cmd="$1"
+  if [[ ! -f "$ROOT/deploy/backup.env" ]]; then
+    return 0
+  fi
+  # shellcheck source=/dev/null
+  source "$ROOT/deploy/backup.env"
+  mcrcon -H 127.0.0.1 -P "${RCON_PORT:-25575}" -p "$RCON_PASSWORD" "$cmd" || true
+}
+
+echo "=== Plugins: WorldEdit + Multiverse-Core + VoidGen ==="
 mkdir -p "$SCHEM_DIR" "$ROOT/server/assets"
 if [[ ! -f "$PLUGINS_DIR/WorldEdit.jar" ]] && ! compgen -G "$PLUGINS_DIR/worldedit-bukkit"*.jar >/dev/null; then
   curl -fsSL "$WORLDEDIT_URL" -o "$PLUGINS_DIR/WorldEdit.jar"
@@ -54,6 +66,10 @@ fi
 if [[ ! -f "$PLUGINS_DIR/Multiverse-Core.jar" ]] && ! compgen -G "$PLUGINS_DIR/multiverse-core"*.jar >/dev/null; then
   curl -fsSL "$MULTIVERSE_URL" -o "$PLUGINS_DIR/Multiverse-Core.jar"
   echo "Installed Multiverse-Core.jar"
+fi
+if [[ ! -f "$PLUGINS_DIR/VoidGen.jar" ]] && ! compgen -G "$PLUGINS_DIR/VoidGen"*.jar >/dev/null; then
+  curl -fsSL "$VOIDGEN_URL" -o "$PLUGINS_DIR/VoidGen.jar"
+  echo "Installed VoidGen.jar"
 fi
 
 echo "=== Spawn schematic ==="
@@ -80,9 +96,16 @@ systemctl restart piscessmp
 echo "Waiting 90s for boot..."
 sleep 90
 
-echo "=== Create spawn hub world (Multiverse) ==="
+echo "=== Create floating void hub world (Multiverse + VoidGen) ==="
+if [[ -d "$SERVER_DIR/$SPAWN_WORLD" ]] && [[ "${RESET_SPAWN_WORLD}" == "1" ]]; then
+  echo "Removing existing ${SPAWN_WORLD} world for void rebuild..."
+  rcon "mv unload $SPAWN_WORLD"
+  rcon "mv remove $SPAWN_WORLD"
+  rcon "mv confirm $SPAWN_WORLD"
+  rm -rf "$SERVER_DIR/$SPAWN_WORLD"
+fi
 if [[ ! -d "$SERVER_DIR/$SPAWN_WORLD" ]]; then
-  rcon "mv create $SPAWN_WORLD normal -t FLAT"
+  rcon "mv create $SPAWN_WORLD normal -g VoidGen"
 else
   echo "World $SPAWN_WORLD already exists — skipping mv create"
 fi
@@ -92,25 +115,32 @@ rcon "mv modify set difficulty peaceful $SPAWN_WORLD"
 rcon "mv modify set animals false $SPAWN_WORLD"
 rcon "mv modify set monsters false $SPAWN_WORLD"
 rcon "mv modify set pvp false $SPAWN_WORLD"
-rcon "execute in minecraft:${SPAWN_WORLD} run gamerule randomTickSpeed 0"
+rcon "mv modify set allow-weather false $SPAWN_WORLD"
+rcon "execute in spawn run gamerule randomTickSpeed 0"
+rcon "execute in spawn run gamerule doDaylightCycle false"
 
-echo "=== Survival world spawn (away from old hub paste) ==="
-rcon "execute in minecraft:${SURVIVAL_WORLD} run setworldspawn ${SURVIVAL_SPAWN_X} ${SURVIVAL_SPAWN_Y} ${SURVIVAL_SPAWN_Z}"
+echo "=== Survival overworld (separate — move spawn away from old hub) ==="
+rcon "execute in minecraft:overworld run setworldspawn ${SURVIVAL_SPAWN_X} ${SURVIVAL_SPAWN_Y} ${SURVIVAL_SPAWN_Z}"
+rcon "execute in minecraft:overworld run forceload add 0 0"
+sleep 3
+rcon "execute in minecraft:overworld run fill 0 63 0 79 90 79 air"
+rcon "execute in minecraft:overworld run forceload remove 0 0"
 
 echo "=== Load chunks + paste hub in $SPAWN_WORLD ==="
 rcon "save-all flush"
 for cx in $(seq "-$FORCELOAD_RADIUS" "$FORCELOAD_RADIUS"); do
   for cz in $(seq "-$FORCELOAD_RADIUS" "$FORCELOAD_RADIUS"); do
-    rcon "execute in minecraft:${SPAWN_WORLD} run forceload add $cx $cz"
+    rcon_fast "execute in spawn run forceload add $cx $cz"
   done
 done
 sleep 8
-rcon "execute in minecraft:${SPAWN_WORLD} run gamerule randomTickSpeed 0"
+rcon "execute in spawn run gamerule randomTickSpeed 0"
 rcon "//world ${SPAWN_WORLD}"
+rcon "//pos1 ${SPAWN_X},${SPAWN_Y},${SPAWN_Z}"
 rcon "//schem load ${SCHEM_NAME}.schem"
-sleep 2
+sleep 5
 rcon "//paste -a"
-rcon "execute in minecraft:${SPAWN_WORLD} run setworldspawn ${SPAWN_X} $((SPAWN_Y + 1)) ${SPAWN_Z}"
+rcon "execute in spawn run setworldspawn ${SPAWN_X} $((SPAWN_Y + 1)) ${SPAWN_Z}"
 
 echo "=== Essentials: hub spawn + survival warp ==="
 ESS_CONFIG="$PLUGINS_DIR/Essentials/config.yml"
@@ -124,6 +154,7 @@ from pathlib import Path
 path = Path(sys.argv[1])
 world, x, y, z = sys.argv[2:7]
 text = path.read_text()
+text = re.sub(r"(?m)^(\s*)-\s*spawn\s*$", "", text)
 text = re.sub(r"spawn-on-join:\s*false", "spawn-on-join: true", text)
 if "spawn-on-join:" not in text:
     text += "\nspawn-on-join: true\n"
@@ -227,7 +258,7 @@ systemctl restart piscessmp
 
 echo ""
 echo "Done."
-echo "  Hub world:     ${SPAWN_WORLD} (adventure, peaceful, schematic pasted)"
+echo "  Hub world:     ${SPAWN_WORLD} (void sky, adventure, schematic floating)"
 echo "  Survival:      ${SURVIVAL_WORLD} (homes, RTP, building)"
 echo "  /spawn         → hub"
 echo "  /warp survival → survival overworld"

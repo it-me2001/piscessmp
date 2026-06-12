@@ -185,6 +185,7 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("BetterRTP", "hangar:Ronan:BetterRTP", MC_VERSION, "BetterRTP.jar"),
         ("WorldEdit", "modrinth:worldedit:paper", MC_VERSION, "WorldEdit.jar"),
         ("Multiverse-Core", "hangar:Multiverse:Multiverse-Core", MC_VERSION, "Multiverse-Core.jar"),
+        ("VoidGen", "modrinth:voidgen:paper", MC_VERSION, "VoidGen.jar"),
     ]
 
     for name, source, version_key, output_name in plugin_specs:

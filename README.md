@@ -120,7 +120,7 @@ Server data persists in the `piscessmp-server` Docker volume.
 | 🧱 | **CoreProtect** | Log and roll back block changes / griefing |
 | 💬 | **DiscordSRV** | Bridge in-game chat to Discord |
 | 🗺️ | **BlueMap** | Live web map at port 8100 |
-| 🏠 | **EssentialsX** | Multiple homes, spawn, TPA between players |
+| 🏠 | **EssentialsX + Spawn** | Homes, `/spawn`, TPA between players |
 | 🎲 | **BetterRTP** | Random teleport across the map (cooldown + delay) |
 | 🔒 | **Caddy proxy** | HTTPS for voice + map on your domain |
 | 📦 | **Auto updater** | Paper + all plugins — daily at 4 AM |

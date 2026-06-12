@@ -182,6 +182,7 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("BlueMap", "modrinth:bluemap:paper", MC_VERSION, "BlueMap.jar"),
         ("PlaceholderAPI", "modrinth:placeholderapi:paper", MC_VERSION, "PlaceholderAPI.jar"),
         ("EssentialsX", "github:EssentialsX/Essentials:EssentialsX", MC_VERSION, "EssentialsX.jar"),
+        ("EssentialsXSpawn", "github:EssentialsX/Essentials:EssentialsXSpawn", MC_VERSION, "EssentialsXSpawn.jar"),
         ("BetterRTP", "hangar:Ronan:BetterRTP", MC_VERSION, "BetterRTP.jar"),
         ("WorldEdit", "modrinth:worldedit:paper", MC_VERSION, "WorldEdit.jar"),
         ("Multiverse-Core", "hangar:Multiverse:Multiverse-Core", MC_VERSION, "Multiverse-Core.jar"),
@@ -208,6 +209,10 @@ def build_plan(root: Path) -> list[UpdateItem]:
             elif asset_key == "EssentialsX":
                 latest_build, url = github_release_asset(
                     repo, r"^EssentialsX-[\d.]+\.jar$"
+                )
+            elif asset_key == "EssentialsXSpawn":
+                latest_build, url = github_release_asset(
+                    repo, r"^EssentialsXSpawn-[\d.]+\.jar$"
                 )
             else:
                 raise RuntimeError(f"Unknown github asset key: {asset_key}")

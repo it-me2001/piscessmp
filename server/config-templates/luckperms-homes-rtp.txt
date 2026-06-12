@@ -1,17 +1,7 @@
-/lp creategroup default
-/lp creategroup member
-/lp creategroup staff
-/lp creategroup admin
-/lp group default meta setprefix "&7"
-/lp group member meta setprefix "&a[Member] &r"
-/lp group staff meta setprefix "&b[Staff] &r"
-/lp group admin meta setprefix "&c[Admin] &r"
-/lp group member parent add default
-/lp group staff parent add member
-/lp group admin parent add staff
-/lp group staff permission set staff.* true
+# Run in server console after EssentialsX + BetterRTP are installed.
+# Grants homes + RTP to all players (default group) and extra homes for members.
 
-# Homes + RTP — see luckperms-homes-rtp.txt for full setup
+# --- Default (everyone) — 3 homes + RTP ---
 /lp group default permission set essentials.home true
 /lp group default permission set essentials.sethome true
 /lp group default permission set essentials.delhome true
@@ -22,5 +12,12 @@
 /lp group default permission set essentials.tpdeny true
 /lp group default permission set essentials.spawn true
 /lp group default permission set betterrtp.use true
+
+# --- Member rank — 5 homes ---
 /lp group member permission set essentials.sethome.multiple.5 true
+
+# --- Staff — 10 homes ---
 /lp group staff permission set essentials.sethome.multiple.10 true
+
+# Optional: promote a player to member
+# /lp user <name> parent set member

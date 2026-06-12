@@ -1,0 +1,20 @@
+# BetterRTP — random teleport (plugins/BetterRTP/config.yml)
+#
+# After first start, recommended defaults for survival SMP:
+#
+#   Delay:
+#     Enabled: true
+#     Time: 5          # seconds before RTP (cancel if you move)
+#   Cooldown:
+#     Enabled: true
+#     Time: 300         # 5 minutes between RTP uses
+#   MaxY: 320
+#   MinY: -60
+#   MaxRadius: 5000     # blocks from world spawn / center
+#   MinRadius: 500      # don't RTP too close to spawn
+#
+# Player command:
+#   /rtp              — random teleport in the current world
+#   /rtp world        — if multi-world RTP is enabled
+#
+# Permission: betterrtp.use (granted in luckperms-homes-rtp.txt)

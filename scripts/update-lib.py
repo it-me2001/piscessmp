@@ -164,6 +164,8 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("DiscordSRV", "modrinth:discordsrv:paper", MC_VERSION, "DiscordSRV.jar"),
         ("BlueMap", "modrinth:bluemap:paper", MC_VERSION, "BlueMap.jar"),
         ("PlaceholderAPI", "modrinth:placeholderapi:paper", MC_VERSION, "PlaceholderAPI.jar"),
+        ("EssentialsX", "github:EssentialsX/Essentials:EssentialsX", MC_VERSION, "EssentialsX.jar"),
+        ("BetterRTP", "modrinth:betterrtp:paper", MC_VERSION, "BetterRTP.jar"),
     ]
 
     for name, source, version_key, output_name in plugin_specs:
@@ -180,6 +182,10 @@ def build_plan(root: Path) -> list[UpdateItem]:
             _, repo, asset_key = source.split(":")
             if asset_key == "Vanilla":
                 latest_build, url = github_release_asset(repo, r"Vanilla\.jar$")
+            elif asset_key == "EssentialsX":
+                latest_build, url = github_release_asset(
+                    repo, r"^EssentialsX-[\d.]+\.jar$"
+                )
             else:
                 raise RuntimeError(f"Unknown github asset key: {asset_key}")
         else:

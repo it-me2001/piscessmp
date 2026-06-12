@@ -56,3 +56,10 @@ download_modrinth "CoreProtect" "coreprotect" "CoreProtect.jar"
 download_modrinth "DiscordSRV" "discordsrv" "DiscordSRV.jar"
 download_modrinth "BlueMap" "bluemap" "BlueMap.jar"
 download_modrinth "PlaceholderAPI" "placeholderapi" "PlaceholderAPI.jar"
+download_modrinth "BetterRTP" "betterrtp" "BetterRTP.jar"
+
+echo "→ EssentialsX.jar (GitHub latest release)"
+ESSENTIALS_URL="$(curl -fsSL "https://api.github.com/repos/EssentialsX/Essentials/releases/latest" \
+  | python3 -c "import json,sys,re; r=json.load(sys.stdin); a=next(x for x in r['assets'] if re.match(r'^EssentialsX-[\\d.]+\\.jar$', x['name'])); print(a['browser_download_url'])")"
+curl -fsSL "$ESSENTIALS_URL" -o "$PLUGINS_DIR/EssentialsX.jar"
+verify_jar "EssentialsX.jar"

@@ -76,6 +76,18 @@ EOF
 /lp group staff parent add member
 /lp group admin parent add staff
 /lp group staff permission set staff.* true
+/lp group default permission set essentials.home true
+/lp group default permission set essentials.sethome true
+/lp group default permission set essentials.delhome true
+/lp group default permission set essentials.sethome.multiple true
+/lp group default permission set essentials.sethome.multiple.3 true
+/lp group default permission set essentials.tpa true
+/lp group default permission set essentials.tpaccept true
+/lp group default permission set essentials.tpdeny true
+/lp group default permission set essentials.spawn true
+/lp group default permission set betterrtp.use true
+/lp group member permission set essentials.sethome.multiple.5 true
+/lp group staff permission set essentials.sethome.multiple.10 true
 EOF
 fi
 
@@ -179,6 +191,61 @@ PY
     mkdir -p "$SERVER_DIR/plugins/DiscordSRV"
     cp "$TEMPLATES/discordsrv-config.yml.example" "$DSRV_CONFIG"
     echo "Created DiscordSRV config — add your bot token and channel ID"
+  fi
+
+  # BetterRTP — survival-friendly cooldown + radius (after first start)
+  BETTERRTP_CONFIG="$SERVER_DIR/plugins/BetterRTP/config.yml"
+  if [[ -f "$BETTERRTP_CONFIG" ]]; then
+    python3 - "$BETTERRTP_CONFIG" <<'PY'
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+lines = path.read_text().splitlines()
+in_delay = in_cooldown = False
+out = []
+for line in lines:
+    stripped = line.strip()
+    if stripped.startswith("Delay:"):
+        in_delay, in_cooldown = True, False
+    elif stripped.startswith("Cooldown:"):
+        in_delay, in_cooldown = False, True
+    elif stripped and not line.startswith(" ") and stripped.endswith(":"):
+        in_delay = in_cooldown = False
+    if in_delay and stripped.startswith("Time:"):
+        indent = line[: len(line) - len(line.lstrip())]
+        line = f"{indent}Time: 5"
+    if in_delay and stripped.startswith("Enabled:"):
+        indent = line[: len(line) - len(line.lstrip())]
+        line = f"{indent}Enabled: true"
+    if in_cooldown and stripped.startswith("Time:"):
+        indent = line[: len(line) - len(line.lstrip())]
+        line = f"{indent}Time: 300"
+    if in_cooldown and stripped.startswith("Enabled:"):
+        indent = line[: len(line) - len(line.lstrip())]
+        line = f"{indent}Enabled: true"
+    out.append(line)
+
+path.write_text("\n".join(out) + "\n")
+print("Patched BetterRTP delay (5s) + cooldown (300s)")
+PY
+  else
+    echo "BetterRTP config not found — start server once after installing BetterRTP.jar"
+  fi
+
+  # EssentialsX — ensure named homes are enabled
+  ESSENTIALS_CONFIG="$SERVER_DIR/plugins/Essentials/config.yml"
+  if [[ -f "$ESSENTIALS_CONFIG" ]]; then
+    if ! grep -q "allow-user-home-names:" "$ESSENTIALS_CONFIG" 2>/dev/null; then
+      echo "allow-user-home-names: true" >> "$ESSENTIALS_CONFIG"
+      echo "Enabled EssentialsX named homes (allow-user-home-names)"
+    fi
+  else
+    echo "EssentialsX config not found — start server once after installing EssentialsX.jar"
+  fi
+
+  if [[ -f "$TEMPLATES/luckperms-homes-rtp.txt" ]]; then
+    echo "Homes + RTP: paste commands from server/config-templates/luckperms-homes-rtp.txt into the console"
   fi
 
   # Domain hint in server.properties

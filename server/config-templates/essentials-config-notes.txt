@@ -1,0 +1,22 @@
+# EssentialsX — homes & teleport (plugins/Essentials/config.yml)
+#
+# After first start, tune these if needed:
+#
+#   spawn-on-join: false
+#   teleport-cooldown: 5
+#   teleport-delay: 3
+#
+# Home limits are controlled by LuckPerms (see luckperms-homes-rtp.txt):
+#   essentials.sethome.multiple.3  → 3 homes
+#   essentials.sethome.multiple.5  → 5 homes
+#   essentials.sethome.multiple.10 → 10 homes
+#
+# Player commands:
+#   /sethome [name]   — save a home (default name: home)
+#   /home [name]      — teleport to a saved home
+#   /delhome [name]   — delete a home
+#   /homes            — list your homes
+#   /spawn            — go to world spawn
+#   /tpa <player>     — request to teleport to someone
+#   /tpaccept         — accept a TPA request
+#   /tpdeny           — deny a TPA request

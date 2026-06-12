@@ -86,6 +86,8 @@ sudo ./setup.sh --firewall --systemd --timers
 | 🧱 | **CoreProtect** | Log and roll back block changes / griefing |
 | 💬 | **DiscordSRV** | Bridge in-game chat to Discord |
 | 🗺️ | **BlueMap** | Live web map at port 8100 |
+| 🏠 | **EssentialsX** | Multiple homes, spawn, TPA between players |
+| 🎲 | **BetterRTP** | Random teleport across the map (cooldown + delay) |
 | 🔒 | **Caddy proxy** | HTTPS for voice + map on your domain |
 | 📦 | **Auto updater** | Paper + all plugins — daily at 4 AM |
 | 💾 | **Auto backups** | Worlds + configs — every 6 hours, 7 retained |
@@ -145,6 +147,21 @@ flowchart TB
 | **Voice (Java)** | Press `V` in-game | [SVC mod 2.6.18](https://modrepo.de/minecraft/voicechat/downloads) |
 | **Voice (Bedrock)** | `/svg` then open browser | `http://your-ip:8080` or `https://voice.yourdomain.com` |
 | **Web map** | Browser | `http://your-ip:8100` or `https://map.yourdomain.com` |
+
+### Player commands (homes & RTP)
+
+| Command | Description |
+|---------|-------------|
+| `/sethome [name]` | Save a home (up to 3 default, 5 member, 10 staff) |
+| `/home [name]` | Teleport to a saved home |
+| `/delhome [name]` | Delete a home |
+| `/homes` | List your homes |
+| `/spawn` | Teleport to world spawn |
+| `/tpa <player>` | Ask to teleport to another player |
+| `/tpaccept` / `/tpdeny` | Accept or deny a TPA request |
+| `/rtp` | Random teleport (5s delay, 5 min cooldown) |
+
+After installing the new plugins, run LuckPerms setup from [`luckperms-homes-rtp.txt`](server/config-templates/luckperms-homes-rtp.txt) in the server console.
 
 ### Ports
 

@@ -113,6 +113,7 @@ echo "  LuckPerms (Staff++ soft-dependency for permissions)"
 echo "  Simple Voice Chat bukkit 2.6.18"
 echo "  SimpleVoice-Geyser 0.1.1-DEV"
 echo "  Geyser + Floodgate (keep versions in sync)"
-echo "  CoreProtect, DiscordSRV, BlueMap, PlaceholderAPI"
+  echo "  CoreProtect, DiscordSRV, BlueMap, PlaceholderAPI"
+  echo "  EssentialsX (homes), BetterRTP (random teleport)"
 echo
 echo "Paper jar: run ./scripts/download-paper.sh (or full ./scripts/debian-setup.sh)"

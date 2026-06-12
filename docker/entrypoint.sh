@@ -19,7 +19,7 @@ elif [[ ! -f "$SERVER_DIR/eula.txt" ]] || ! grep -q '^eula=true' "$SERVER_DIR/eu
   exit 1
 fi
 
-if [[ -n "${RCON_PASSWORD:-}" ]]; then
+if [[ -n "${RCON_PASSWORD:-}" ]] && [[ "${RCON_PASSWORD}" != "change-me" ]]; then
   cat > "$DEPLOY_DIR/backup.env" <<EOF
 RCON_PASSWORD=${RCON_PASSWORD}
 RCON_HOST=127.0.0.1

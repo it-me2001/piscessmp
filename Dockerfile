@@ -29,6 +29,7 @@ ENV ACCEPT_EULA=false \
 
 EXPOSE 25565/tcp 25575/tcp 19132/udp 24454/udp 8100/tcp 8080/tcp
 
-VOLUME ["/piscessmp/server/world", "/piscessmp/server/spawn", "/piscessmp/server/plugins", "/piscessmp/server/logs", "/piscessmp/server/backups"]
+# Do not declare VOLUME for server/ subdirs — bind-mount ./server:/piscessmp/server
+# and anonymous volumes would hide host plugins, worlds, and configs.
 
 ENTRYPOINT ["/piscessmp/docker/entrypoint.sh"]

@@ -56,7 +56,25 @@ download_modrinth "CoreProtect" "coreprotect" "CoreProtect.jar"
 download_modrinth "DiscordSRV" "discordsrv" "DiscordSRV.jar"
 download_modrinth "BlueMap" "bluemap" "BlueMap.jar"
 download_modrinth "PlaceholderAPI" "placeholderapi" "PlaceholderAPI.jar"
-download_modrinth "BetterRTP" "betterrtp" "BetterRTP.jar"
+
+echo "→ BetterRTP.jar (Hangar Ronan/BetterRTP)"
+BETTERRTP_META="$(python3 - <<'PY'
+import json, urllib.parse, urllib.request
+query = urllib.parse.urlencode({"limit": 1, "offset": 0, "platform": "PAPER"})
+url = f"https://hangar.papermc.io/api/v1/projects/Ronan/BetterRTP/versions?{query}"
+with urllib.request.urlopen(url) as response:
+    versions = json.load(response)["result"]
+latest = versions[0]
+paper = latest["downloads"]["PAPER"]
+print(latest["name"])
+print(paper["downloadUrl"])
+PY
+)"
+BETTERRTP_VERSION="$(echo "$BETTERRTP_META" | sed -n '1p')"
+BETTERRTP_URL="$(echo "$BETTERRTP_META" | sed -n '2p')"
+echo "→ BetterRTP.jar ($BETTERRTP_VERSION)"
+curl -fsSL "$BETTERRTP_URL" -o "$PLUGINS_DIR/BetterRTP.jar"
+verify_jar "BetterRTP.jar"
 
 echo "→ EssentialsX.jar (GitHub latest release)"
 ESSENTIALS_URL="$(curl -fsSL "https://api.github.com/repos/EssentialsX/Essentials/releases/latest" \

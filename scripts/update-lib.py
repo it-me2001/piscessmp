@@ -90,6 +90,23 @@ def paper_latest() -> tuple[str, str, str]:
     return build_id, download["url"], download["checksums"]["sha256"]
 
 
+def hangar_latest(namespace: str, slug: str, platform: str = "PAPER") -> tuple[str, str, str]:
+    query = urllib.parse.urlencode({"limit": 10, "offset": 0, "platform": platform})
+    payload = fetch_json(
+        f"https://hangar.papermc.io/api/v1/projects/{namespace}/{slug}/versions?{query}"
+    )
+    versions = payload.get("result") or []
+    if not versions:
+        raise RuntimeError(f"No Hangar release for {namespace}/{slug} ({platform})")
+    latest = versions[0]
+    platform_download = latest["downloads"][platform]
+    return (
+        latest["name"],
+        platform_download["downloadUrl"],
+        platform_download["fileInfo"]["name"],
+    )
+
+
 def github_release_asset(repo: str, asset_pattern: str) -> tuple[str, str]:
     release = fetch_json(f"https://api.github.com/repos/{repo}/releases/latest")
     tag = release["tag_name"]
@@ -165,7 +182,7 @@ def build_plan(root: Path) -> list[UpdateItem]:
         ("BlueMap", "modrinth:bluemap:paper", MC_VERSION, "BlueMap.jar"),
         ("PlaceholderAPI", "modrinth:placeholderapi:paper", MC_VERSION, "PlaceholderAPI.jar"),
         ("EssentialsX", "github:EssentialsX/Essentials:EssentialsX", MC_VERSION, "EssentialsX.jar"),
-        ("BetterRTP", "modrinth:betterrtp:paper", MC_VERSION, "BetterRTP.jar"),
+        ("BetterRTP", "hangar:Ronan:BetterRTP", MC_VERSION, "BetterRTP.jar"),
     ]
 
     for name, source, version_key, output_name in plugin_specs:
@@ -178,6 +195,9 @@ def build_plan(root: Path) -> list[UpdateItem]:
         elif source.startswith("modrinth:"):
             _, project, loader = source.split(":")
             latest_build, url, _ = modrinth_latest(project, loader, version_key)
+        elif source.startswith("hangar:"):
+            _, namespace, slug = source.split(":")
+            latest_build, url, _ = hangar_latest(namespace, slug, "PAPER")
         elif source.startswith("github:"):
             _, repo, asset_key = source.split(":")
             if asset_key == "Vanilla":
